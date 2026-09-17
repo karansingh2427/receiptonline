@@ -38,3 +38,5 @@ tax-ready spreadsheet.
 
 ## Open
 - [ ] Answer user: data ownership if Lovable license lapses (cloud pause vs deletion; export as backup)
+
+- [ ] Push code to user GitHub repo (via Lovable GitHub sync — user action in editor)
