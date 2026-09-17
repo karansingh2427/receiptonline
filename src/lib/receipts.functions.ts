@@ -52,7 +52,7 @@ export const saveReceipt = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<ReceiptRow> => {
     const { supabase, userId } = context;
 
-    const base: Database["public"]["Tables"]["receipts"]["Insert"] = {
+    const base: Omit<Database["public"]["Tables"]["receipts"]["Insert"], "user_id"> = {
       merchant: data.merchant,
       purchase_date: data.purchase_date,
       total_amount: Number(data.total_amount.toFixed(2)),
