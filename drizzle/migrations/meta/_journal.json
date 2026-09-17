@@ -8,6 +8,13 @@
       "when": 1789627388581,
       "tag": "0000_create_receipts_table",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789628932156,
+      "tag": "0001_harden_set_updated_at_search_path",
+      "breakpoints": true
     }
   ]
 }
