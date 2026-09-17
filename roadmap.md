@@ -33,5 +33,8 @@ tax-ready spreadsheet.
 - [ ] /receipts/$id detail/edit + delete
 - [ ] server fns in src/lib/receipts.functions.ts (list/get/save/delete/extract)
 
+## Export
+- [x] /app dashboard Export button → XLSX (Receipts + Summary sheets, grand total) — src/lib/export.ts
+
 ## Open
-- none
+- [ ] Answer user: data ownership if Lovable license lapses (cloud pause vs deletion; export as backup)
