@@ -263,7 +263,9 @@ function EmptyState() {
 }
 
 function monthLabel(key: string): string {
-  const [y, m] = key.split("-").map(Number);
-  const d = new Date(y, (m ?? 1) - 1, 1);
+  const parts = key.split("-").map(Number);
+  const y = parts[0] ?? 2000;
+  const m = parts[1] ?? 1;
+  const d = new Date(y, m - 1, 1);
   return new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric" }).format(d);
 }
