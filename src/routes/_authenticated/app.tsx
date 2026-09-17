@@ -4,6 +4,9 @@ import { useMemo, useState } from "react";
 import { receiptsQueryOptions } from "@/lib/queries";
 import { TopBar } from "@/components/top-bar";
 import { exportReceipts } from "@/lib/export";
+import { downloadReceiptPhotosZip, type ZipProgress } from "@/lib/photos-zip";
+import { toast } from "sonner";
+
 import {
   formatEuro,
   formatEuroCompact,
@@ -30,7 +33,10 @@ type SortKey = "date" | "amount" | "store";
 function AppPage() {
   const { data: receipts } = useSuspenseQuery(receiptsQueryOptions);
   const [exporting, setExporting] = useState(false);
+  const [zipping, setZipping] = useState(false);
+  const [zipProgress, setZipProgress] = useState<ZipProgress | null>(null);
   const [sort, setSort] = useState<SortKey>("date");
+
 
   const sorted = useMemo(() => {
     const arr = [...receipts];
@@ -88,9 +94,48 @@ function AppPage() {
     }
   }
 
+  const photoCount = receipts.filter((r) => !!r.image_path).length;
+
+  async function handleExportPhotos() {
+    if (!photoCount || zipping) return;
+    setZipping(true);
+    setZipProgress({ done: 0, total: photoCount });
+    try {
+      const res = await downloadReceiptPhotosZip(sorted, setZipProgress);
+      if (res.failed) {
+        toast.warning(`${res.added} of ${res.total} photos downloaded`, {
+          description: `${res.failed} could not be fetched. Try again in a moment.`,
+        });
+      } else {
+        toast.success(`${res.added} receipt photos downloaded`, {
+          description: "The ZIP also contains index.csv with all receipt details.",
+        });
+      }
+    } catch {
+      toast.error("Could not build the ZIP", { description: "Please try again." });
+    } finally {
+      setZipping(false);
+      setZipProgress(null);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-paper pb-28">
-      <TopBar showExport onExport={handleExport} exporting={exporting} />
+      <TopBar
+        showExport
+        onExport={handleExport}
+        exporting={exporting}
+        {...(photoCount > 0
+          ? {
+              onExportPhotos: handleExportPhotos,
+              photosBusy: zipping,
+              photosLabel: zipping
+                ? `${zipProgress?.done ?? 0}/${zipProgress?.total ?? photoCount}…`
+                : `Photos (${photoCount})`,
+            }
+          : {})}
+      />
+
 
       <div className="mx-auto max-w-2xl px-4 pt-5">
         {/* Grand total */}
