@@ -222,7 +222,7 @@ function Badge({ tone, children }: { tone: "paper" | "brand" | "cash" | "neutral
     neutral: "bg-ink/10 text-ink-soft",
   };
   return (
-    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${tones[tone] ?? tones.neutral}`}>
+    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${tones[tone] ?? tones["neutral"]}`}>
       {children}
     </span>
   );
