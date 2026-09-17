@@ -47,12 +47,12 @@ export const saveReceipt = createServerFn({ method: "POST" })
         source: z.string().default("manual"),
         raw_extraction: z.unknown().nullish(),
       })
-      .parse(data) satisfies ReceiptInput,
+      .parse(data),
   )
   .handler(async ({ data, context }): Promise<ReceiptRow> => {
     const { supabase, userId } = context;
 
-    const base = {
+    const base: Database["public"]["Tables"]["receipts"]["Insert"] = {
       merchant: data.merchant,
       purchase_date: data.purchase_date,
       total_amount: Number(data.total_amount.toFixed(2)),
@@ -62,7 +62,7 @@ export const saveReceipt = createServerFn({ method: "POST" })
       notes: data.notes ?? null,
       image_path: data.image_path ?? null,
       source: data.source,
-      raw_extraction: (data.raw_extraction ?? null) as unknown,
+      raw_extraction: (data.raw_extraction ?? null) as Database["public"]["Tables"]["receipts"]["Insert"]["raw_extraction"],
     };
 
     if (data.id) {
