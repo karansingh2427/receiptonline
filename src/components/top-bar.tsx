@@ -5,11 +5,17 @@ export function TopBar({
   showExport,
   onExport,
   exporting,
+  onExportPhotos,
+  photosLabel,
+  photosBusy,
   right,
 }: {
   showExport?: boolean;
   onExport?: () => void;
   exporting?: boolean;
+  onExportPhotos?: () => void;
+  photosLabel?: string;
+  photosBusy?: boolean;
   right?: React.ReactNode;
 }) {
   return (
@@ -27,6 +33,20 @@ export function TopBar({
 
         <div className="flex items-center gap-2">
           {right}
+          {onExportPhotos && (
+            <button
+              type="button"
+              onClick={onExportPhotos}
+              disabled={photosBusy}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full bg-panel px-3 py-2 text-[12px] font-semibold text-ink ring-1 ring-ink/15 transition",
+                photosBusy ? "opacity-60" : "active:scale-95",
+              )}
+            >
+              <span className="inline-block size-1.5 rounded-full bg-accent" />
+              {photosLabel ?? "Photos"}
+            </button>
+          )}
           {showExport && (
             <button
               type="button"
@@ -46,3 +66,4 @@ export function TopBar({
     </header>
   );
 }
+
